@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Моя визитка</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;700&display=swap">
+<style>
+:root {
+  --bg: #eef1f6; --card: #ffffff; --fg: #141824; --muted: #5d6476;
+  --line: #e2e6ee; --chip: #f3f5f9; --tg: #229ED9;
+  --ig-a: #f58529; --ig-b: #dd2a7b; --ig-c: #8134af;
+  --display: "Unbounded", "Manrope", system-ui, sans-serif;
+  --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f121a; --card: #181c27; --fg: #eef1f7; --muted: #9aa2b5; --line: #2a3040; --chip: #222837; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body);
+  padding-inline: 16px; padding-block: 32px; min-height: 100vh;
+}
+.card {
+  max-width: 400px; margin: 0 auto; background: var(--card);
+  border-radius: 28px; padding: 32px 22px 24px;
+  box-shadow: 0 1px 0 var(--line), 0 20px 50px -24px rgba(20,24,36,.35);
+  display: flex; flex-direction: column; gap: 22px;
+}
+.head { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.avatar { width: 108px; height: 108px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, var(--ig-a), var(--ig-b) 55%, var(--tg)); }
+.avatar-inner { width: 100%; height: 100%; border-radius: 50%; background: var(--card); display: grid; place-items: center; overflow: hidden; font-family: var(--display); font-weight: 700; font-size: 34px; color: var(--fg); }
+.avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+h1 { font-family: var(--display); font-weight: 700; font-size: 22px; line-height: 1.2; margin: 6px 0 0; }
+.role { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+.links { display: flex; flex-direction: column; gap: 12px; }
+.btn { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; text-decoration: none; color: #fff; font-weight: 700; font-size: 16px; transition: transform .15s ease, filter .15s ease; }
+.btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.btn:focus-visible { outline: 3px solid var(--fg); outline-offset: 3px; }
+.btn svg { width: 28px; height: 28px; flex: none; }
+.btn .txt { display: flex; flex-direction: column; min-width: 0; }
+.btn small { font-weight: 500; font-size: 13px; opacity: .9; overflow-wrap: anywhere; }
+.btn .arrow { margin-left: auto; opacity: .85; font-size: 20px; }
+.ig { background: linear-gradient(100deg, var(--ig-a), var(--ig-b) 50%, var(--ig-c)); }
+.tg { background: var(--tg); }
+.copy { display: flex; align-items: center; justify-content: center; padding: 13px 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--chip); color: var(--fg); font: 600 15px var(--body); cursor: pointer; }
+.foot { text-align: center; color: var(--muted); font-size: 12px; margin: 0; }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:hover { transform: none; } }
+</style>
+</head>
+<body>
+<main class="card">
+  <section class="head">
+    <div class="avatar"><div class="avatar-inner" id="avatar"></div></div>
+    <h1 id="name"></h1>
+    <p class="role" id="role"></p>
+  </section>
+  <nav class="links">
+    <a class="btn ig" id="ig" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      <span class="txt">Instagram<small id="ig-handle"></small></span>
+      <span class="arrow" aria-hidden="true">›</span>
+    </a>
+    <a class="btn tg" id="tg" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 4.2 2.9 11.4c-1 .4-1 1.6 0 1.9l4.6 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.5 4.8 3.5c.6.4 1.4.1 1.6-.6l3.2-15.4c.2-.9-.7-1.7-1.5-1.4ZM9.9 14.4l-.5 4-1.5-4.8 10.4-6.8-8.4 7.6Z"/></svg>
+      <span class="txt">Telegram<small id="tg-handle"></small></span>
+      <span class="arrow" aria-hidden="true">›</span>
+    </a>
+    <button class="copy" id="copy" type="button">Скопировать ссылку на визитку</button>
+  </nav>
+  <p class="foot">Нажмите на кнопку, чтобы открыть профиль</p>
+</main>
+
+<script>
+/* ===== ВАШИ ДАННЫЕ: поменяйте здесь ===== */
+const CARD = {
+  name: "Ваше Имя Фамилия",
+  role: "Должность · Компания",
+  instagram: "username",   // без @
+  telegram: "username",    // без @
+  photo: ""                // имя файла фото рядом с index.html, например "photo.jpg", или пусто
+};
+/* ======================================== */
+
+const $ = id => document.getElementById(id);
+$("name").textContent = CARD.name;
+$("role").textContent = CARD.role;
+$("ig").href = "https://instagram.com/" + CARD.instagram;
+$("tg").href = "https://t.me/" + CARD.telegram;
+$("ig-handle").textContent = "@" + CARD.instagram;
+$("tg-handle").textContent = "@" + CARD.telegram;
+if (CARD.photo) {
+  const img = new Image(); img.src = CARD.photo; img.alt = CARD.name;
+  $("avatar").appendChild(img);
+} else {
+  $("avatar").textContent = CARD.name.split(/\s+/).map(w => w[0] || "").slice(0, 2).join("").toUpperCase();
+}
+$("copy").addEventListener("click", () => {
+  const btn = $("copy"), url = location.href;
+  const done = t => { btn.textContent = t; setTimeout(() => btn.textContent = "Скопировать ссылку на визитку", 2000); };
+  if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => done("Ссылка скопирована"), () => done(url));
+  else done(url);
+});
+</script>
+</body>
+</html>
